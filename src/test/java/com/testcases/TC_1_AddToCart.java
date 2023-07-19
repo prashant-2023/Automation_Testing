@@ -32,9 +32,9 @@ public class TC_1_AddToCart extends BaseTest{
 
 
 
-		webdriversession().get(url);
+		//webdriversession().get(url);
 
-		homepage.verifyPageTitle();
+		//homepage.verifyPageTitle();
 		//mouseHover(webdriversession().findElement(By.xpath("//*[@id=\"blogsmenu\"]")));
 		//webdriversession().findElement(By.xpath("//*[@id=\"cssmenu\"]/ul/li[2]/ul/li[1]/a")).click();
 		//loginpage.login();

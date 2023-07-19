@@ -17,13 +17,13 @@ public class loginPage extends BaseTest{
 	}
 
 
-	@FindBy(id="user-name")
+	@FindBy(xpath="//input[@id='username']")
 	WebElement usrname;
 
-	@FindBy(id="password")
+	@FindBy(xpath="//input[@id='password']")
 	WebElement paswd;
 
-	@FindBy(id = "login-button")
+	@FindBy(xpath = "//input[@id='Login']")
 	WebElement loginBtn;
 
 	public void login() {

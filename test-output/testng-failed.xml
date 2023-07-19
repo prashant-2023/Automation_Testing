@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
-  <test thread-count="5" name="TC_1_AddToCart(failed)">
+<suite thread-count="1" parallel="tests" name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
+  <test thread-count="1" parallel="tests" name="CreateNewLead(failed)">
     <classes>
-      <class name="com.testcases.TC_1_AddToCart">
+      <class name="com.testcases.NewLead">
         <methods>
-          <include name="closeTest"/>
-          <include name="addToCart" invocation-numbers="0"/>
+          <include name="createNewLead"/>
+          <include name="driverQuitter"/>
         </methods>
-      </class> <!-- com.testcases.TC_1_AddToCart -->
+      </class> <!-- com.testcases.NewLead -->
     </classes>
-  </test> <!-- TC_1_AddToCart(failed) -->
+  </test> <!-- CreateNewLead(failed) -->
 </suite> <!-- Failed suite [Suite] -->

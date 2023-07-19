@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,7 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
 import com.constants.Constants;
-import com.log4j.LoggerClass;
+
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -48,8 +50,10 @@ public class BaseTest {
 
 	}
 
-
-
+	
+		
+		public static Logger log = LogManager.getLogger(BaseTest.class);
+	
 
 	public  WebDriver webdriversession() {
 
@@ -57,12 +61,14 @@ public class BaseTest {
 
 		if(currentThreadId == null) {
 
-			try {
-				setupWebDriver();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+				try {
+					setupWebDriver();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 			currentThreadId = map.get(Thread.currentThread().getId());
 		}
 
@@ -91,8 +97,9 @@ public class BaseTest {
 			options.addArguments("--disable-notifications");
 			options.addArguments("--remote-allow-origins");
 			options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-			//options.addArguments("disable-infobars");
+			options.addArguments("disable-infobars");
 			WebDriverManager.chromedriver().setup();
+			driver.get(prop.getProperty("appFourURL"));
 			break;
 
 		case "chromeheadless" :
@@ -103,6 +110,7 @@ public class BaseTest {
 			options.addArguments("--remote-allow-origins");
 			options.setExperimentalOption("excludeSwitches", "enable-automation");
 			WebDriverManager.chromedriver().setup();
+			//driver.get(prop.getProperty("apponeURL"));
 			break;
 
 		case "Firefox" :
@@ -112,6 +120,7 @@ public class BaseTest {
 			options.addArguments("--remote-allow-origins");
 			options.setExperimentalOption("excludeSwitches", "enable-automation");
 			WebDriverManager.firefoxdriver().setup();
+			//driver.get(prop.getProperty("apptwoURL"));
 			break;
 
 		case "Edge" :
@@ -121,6 +130,7 @@ public class BaseTest {
 			options.addArguments("--remote-allow-origins");
 			options.setExperimentalOption("excludeSwitches", "enable-automation");
 			WebDriverManager.edgedriver().setup();
+			//driver.get(prop.getProperty("appThreeURL"));
 			break;
 
 		}
