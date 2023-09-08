@@ -1,0 +1,58 @@
+{
+
+"TestCase1":{
+
+		"Contact": {
+		
+		"FirstName" : "Sushma",
+		"LastName"	: "Swaraj",
+		"Company"	: "SBI",
+		"Email"		: "swaraj247@gmail.com",
+		"Status"	: "New",
+		"Category"	: "NA",
+		"Description"	: "New Contact added",
+		"Address"	: "New Delhi",
+		"PhNumber"	: "011-2434587",
+		"DOB"		: "09-12-1975",
+		"Country"	: "India"
+					},
+		"Deals":{
+		
+		"Title"		: "Real Estate",
+		"AssignedTo": "Naveen Patnaik",
+		"Company"	: "HDFC Ltd.",
+		"Products"	: "Mortgage",
+		"Description": "Issuance of mortgage loan",
+		"Status"	: "New"
+		
+		}
+		
+},
+
+"CRMlogin":{
+		
+		"UserName" : "pk19960708@gmail.com",
+		"Password" : "TUByYXRob24xMjM0"
+
+
+},
+
+"NewContact":{
+		
+		"FirstName" : "S K",
+		"LastName"	: "Somnath",
+		"Company"	: "ISRO",
+		"Email"		: "sksomnath@gmail.com",
+		"Status"	: "New",
+		"Address"	: "Mayur Vihar",
+		"City"		: "New Delhi",
+		"State"		: "New Delhi",
+		"PhNumber"	: "011-2434587",
+		"ZipCode"	: "11001",
+		"Country"	: "India",
+		"Source"	: "Referral"
+					}
+
+
+
+}
