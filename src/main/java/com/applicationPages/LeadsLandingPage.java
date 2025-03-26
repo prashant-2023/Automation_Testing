@@ -63,6 +63,6 @@ public class LeadsLandingPage extends BaseTest{
 	
 	Select select = new Select(webdriversession().findElement(By.xpath("//button[@aria-label='Lead Status, New']")));
 	select.selectByVisibleText(status);
-	log.info("Following status is selected" + status);
+	Logger().info("Following status is selected" + status);
 }
 }

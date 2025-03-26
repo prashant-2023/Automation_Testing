@@ -1,6 +1,5 @@
 package com.testcases;
 
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 import com.applicationPages.*;
@@ -23,22 +22,26 @@ public class NewLead extends BaseTest{
 		//webdriversession().get(prop.getProperty("appFourURL"));
 		login.login();
 		landingpage.verifyLandingPage();
+		
 		landingpage.clickonleadBtn();
 		leadslandingpage.clickonNewBtn();
 		leadslandingpage.selectLeadStatus("New");
 	}
-	
-	@AfterTest(alwaysRun = true)
+	/*
+	@AfterMethod(alwaysRun = true)
 	public void driverQuitter(){
-	    if(driver != null){
+	    if(webdriversession() != null){
 	        log.info("Closing browser after TestClass");
-	        driver.quit();
+	        webdriversession().quit();
+	        map.remove(Thread.currentThread().getId());
+	        
 	    }else{
 	    	log.error("Driver is null at AfterTest (TestBase)");
 	    }
 	    log.info("Teardown - Exiting");
+	    */
 	}
 	
 
-}
+
 

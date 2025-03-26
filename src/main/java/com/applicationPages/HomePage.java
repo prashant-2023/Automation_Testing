@@ -73,9 +73,9 @@ public class HomePage extends BaseTest{
 
 		}
 	}
-	public static void dragDrop(WebElement dragitem, WebElement droplocation) {
+	public void dragDrop(WebElement dragitem, WebElement droplocation) {
 
-		Actions act = new Actions(driver);
+		Actions act = new Actions(webdriversession());
 
 		act.dragAndDrop(dragitem, droplocation).build().perform();
 
@@ -83,7 +83,7 @@ public class HomePage extends BaseTest{
 	}
 	public void verifyPageTitle() {
 
-		String title = driver.getTitle();
+		String title = webdriversession().getTitle();
 		System.out.println("Page Title is : " + title);
 
 		Assert.assertTrue(title.contains("Salesforce"));

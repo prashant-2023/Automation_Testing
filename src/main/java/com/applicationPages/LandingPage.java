@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import com.commons.BaseTest;
+import com.constants.Constants;
 
 
 
@@ -31,26 +32,26 @@ public class LandingPage extends BaseTest{
 	
 	public void verifyLandingPage() {
 		
-		WebDriverWait  wait = new WebDriverWait(driver, Duration.ofSeconds(com.constants.Constants.IMPLICIT_WAIT_TIMEOUT));
+		WebDriverWait  wait = new WebDriverWait(webdriversession(), Duration.ofSeconds(Constants.IMPLICIT_WAIT_TIMEOUT));
 		wait.until(ExpectedConditions.visibilityOf(salesTitle));
 		
-		String title = driver.getTitle();
+		String title = webdriversession().getTitle();
 		
 		if(title.equalsIgnoreCase("Home")) {
 			
-			log.info("User is landed on home page");
+			Logger().info("User is landed on home page");
 		}
 		
 		else {
 			
-			log.info("Page is still loadiing");
+			Logger().info("Page is still loadiing");
 		}
 	}
 	
 	public void clickonleadBtn() {
 		
-		WebElement element = driver.findElement(By.xpath("//a[@title='Leads']"));
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+		WebElement element = webdriversession().findElement(By.xpath("//a[@title='Leads']"));
+		((JavascriptExecutor) webdriversession()).executeScript("arguments[0].click();", element);
 		
 		
 	}

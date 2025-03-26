@@ -1,24 +1,33 @@
 package com.commons;
 
+
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Timeouts;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
+
 //import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
+
 
 import com.constants.Constants;
 
@@ -29,10 +38,11 @@ public class BaseTest {
 
 	public static Properties prop;
 	static WebDriverWait wait;
-	public static  WebDriver driver;
+	static WebDriverWait waitMillis;
+	
 	public static HashMap<Long, WebDriver> map = new HashMap<>();
 
-
+	
 	public BaseTest() {
 
 		try {
@@ -41,128 +51,101 @@ public class BaseTest {
 			prop.load(fip);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
 	}
 
 	
+		public static Logger Logger() {
+			
+			Logger log = LogManager.getLogger(BaseTest.class.getName());
+			return log;
+			
+		}
 		
-		public static Logger log = LogManager.getLogger(BaseTest.class);
-	
-
-	public  WebDriver webdriversession() {
-
-		WebDriver currentThreadId = map.get(Thread.currentThread().getId());
-
-		if(currentThreadId == null) {
-
-			
-				try {
-					setupWebDriver();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-			currentThreadId = map.get(Thread.currentThread().getId());
-		}
+		
+		public static synchronized WebDriver webdriversession() {
+	        Long threadId = Thread.currentThread().getId();
+	        WebDriver driver = map.get(threadId);
+	        
+	        if (driver == null) {
+	            try {
+	                driver = setupWebDriver();
+	                map.put(threadId, driver);
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        return driver;
+	    }
 
 
-		return currentThreadId;
+		public static synchronized WebDriver setupWebDriver() throws InterruptedException {
+	        WebDriver driver = null;
+	        ChromeOptions options = new ChromeOptions();
+	        FirefoxOptions fireOpt = new FirefoxOptions();
 
-	}
+	        String browser = prop.getProperty("browser");
+	        
+	        switch (browser.toLowerCase()) {
+	            case "chrome":
+	                options.addArguments("--disable-extensions", "--disable-notifications", "--start-maximized", "--disable-save-password-bubble");
+	                options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+	                options.addArguments("--disable-Save-password-bubble");
+	                driver = WebDriverManager.chromedriver().capabilities(options).create();
+	                driver.get(prop.getProperty("crmURL"));
+	                break;
 
+	            case "firefox":
+	                driver = WebDriverManager.firefoxdriver().capabilities(fireOpt).create();
+	                driver.get(prop.getProperty("crmURL"));
+	                break;
 
-	public void setupWebDriver() throws InterruptedException {
+	            case "edge":
+	                driver = WebDriverManager.edgedriver().create();
+	                driver.get(prop.getProperty("crmURL"));
+	                break;
 
-		driver= new ChromeDriver();	
+	            default:
+	                throw new IllegalArgumentException("Unsupported browser: " + browser);
+	        }
 
-
-		ChromeOptions options = new ChromeOptions();
-		//prop = new Properties();
-
-		String browser = prop.getProperty("browser");
-		//driver = new WebDriver();
-		switch(browser) {
-
-
-		case "chrome" :
-
-			options.addArguments("--disable-extensions");
-			options.addArguments("--disable-notifications");
-			options.addArguments("--remote-allow-origins");
-			options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-			options.addArguments("disable-infobars");
-			WebDriverManager.chromedriver().setup();
-			driver.get(prop.getProperty("appFourURL"));
-			break;
-
-		case "chromeheadless" :
-
-			options.addArguments("--disable-extensions");
-			options.addArguments("--disable-notifications");
-			options.addArguments("--headless");
-			options.addArguments("--remote-allow-origins");
-			options.setExperimentalOption("excludeSwitches", "enable-automation");
-			WebDriverManager.chromedriver().setup();
-			//driver.get(prop.getProperty("apponeURL"));
-			break;
-
-		case "Firefox" :
-
-			options.addArguments("--disable-extensions");
-			options.addArguments("--disable-notifications");
-			options.addArguments("--remote-allow-origins");
-			options.setExperimentalOption("excludeSwitches", "enable-automation");
-			WebDriverManager.firefoxdriver().setup();
-			//driver.get(prop.getProperty("apptwoURL"));
-			break;
-
-		case "Edge" :
-
-			options.addArguments("--disable-extensions");
-			options.addArguments("--disable-notifications");
-			options.addArguments("--remote-allow-origins");
-			options.setExperimentalOption("excludeSwitches", "enable-automation");
-			WebDriverManager.edgedriver().setup();
-			//driver.get(prop.getProperty("appThreeURL"));
-			break;
-
-		}
-		//WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.manage().window().maximize();
-		driver.manage().deleteAllCookies();
-		map.put(Thread.currentThread().getId(), driver);
-
-
-	}
+	        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Constants.PAGE_LOAD_TIMEOUT));
+	        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.IMPLICIT_WAIT_TIMEOUT));
+	        wait = new WebDriverWait(driver, Duration.ofSeconds(Constants.WEBDRIVER_WAIT_TIMEOUT));
+	        waitMillis = new WebDriverWait(driver, Duration.ofMillis(Constants.WEBDRIVER_WAIT_TIMEOUT));
+	        driver.manage().deleteAllCookies();
+	       // map.put(Thread.currentThread().getId(), driver);
+	        return driver;
+	    }
 
 	public void countLinksonWebPage() {
 
 
 		List<WebElement> links = webdriversession().findElements(By.tagName("a"));
 		//List<WebElement> checkboxes = webdriversession().findElements(By.xpath("//*[@type=\"checkbox\"]"));
-
+		
+		//List<WebElement> activelinks = webdriversession().findElements(By.tagName("a"));
+		
+		
 		int count = 0;
 
 		System.out.println("Total no. of links on the webpage is : " + links.size());
 
-		for (int i = 0; i<=links.size(); i++)
+		for (WebElement link: links)
 		{
 
 			count++;	
-			System.out.println(count);
-			System.out.println(links.get(i).getText());
-
-
+			
+			System.out.println(link.getText());
 
 		}
+		System.out.println(count);
 	}
 	public void countCheckBoxes() {
 
@@ -185,14 +168,63 @@ public class BaseTest {
 
 		}
 	}
-	public void mouseHover(WebElement element) {
+	public boolean mouseHover(WebElement element) {
+		
+		boolean flag = false;
 
 		Actions action = new Actions(webdriversession());
-		action.moveToElement(element).build().perform();
-		Reporter.log("Mouse Hovered on Menu.");
-
-
+		
+				
+		try {
+			action.moveToElement(element).build().perform();
+			flag=true;
+			Reporter.log("Mouse Hovered action performed.");
+		}
+		catch(StaleElementReferenceException e) {
+			
+			Reporter.log("Error in mouse hover at " + element);
+			e.printStackTrace();
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	
 	}
+	
+	public void genericwait(long s) {
+		
+		try {
+			Thread.sleep(s);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void selectStatus(String status) {
+		
+		genericwait(3000);
+		
+		WebElement statusdrpdwn = webdriversession().findElement(By.cssSelector("div[name='status'][role='listbox']"));
+		statusdrpdwn.click();
+		WebElement statusOption = webdriversession().findElement(By.xpath("//*[@name='status' and @role='listbox']//span[contains(text(),'" + status + "')]"));
+		statusOption.click();
+		
+	}
+	
+	public void selectSource(String option) {
+		
+		WebElement source_drpdwn = webdriversession().findElement(By.xpath("//*[@name='source' and @class='ui selection dropdown']"));
+		
+		source_drpdwn.click();
+		
+		WebElement srcOption = webdriversession().findElement(By.xpath("//*[@name='source' and @role='listbox']//span[contains(text(),'" + option +"')]"));
+		srcOption.click();
+	}
+	
+	
 
 
 }
