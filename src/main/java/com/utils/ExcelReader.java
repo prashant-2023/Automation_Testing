@@ -54,7 +54,7 @@ public class ExcelReader {
 			}
 
 
-			for(int i=0; i<sheet.getLastRowNum();i++) {
+			for(int i=0; i<=sheet.getLastRowNum();i++) {
 
 				XSSFRow row = sheet.getRow(i);
 
@@ -66,13 +66,15 @@ public class ExcelReader {
 					if(keyCell !=null && valuecell!=null) {
 
 
-						String key = getCellValueAsString(keyCell);
-						String value = getCellValueAsString(valuecell);
+						String key = getCellValueAsString(keyCell).trim();
+						String value = getCellValueAsString(valuecell).trim();
 
-						if(!key.isEmpty()) {
+						if(key!=null && value!=null) {
 
 							map.put(key, value);
 
+						}else {
+							System.out.println("Warning: Found null value in Excel at row" + i);
 						}
 
 					}

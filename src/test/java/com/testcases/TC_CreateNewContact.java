@@ -10,6 +10,8 @@ import com.utils.ExcelReader;
 import com.utils.JSONReader;
 import com.utils.TestUtils;
 
+import io.cucumber.java.Scenario;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -35,8 +37,11 @@ public class TC_CreateNewContact extends BaseTest{
 	@BeforeMethod
 	public Map<String,String> getExcelData() {
 		
+		
 						
 		return reader.readExcelData(sheet);
+		
+		
 	}
 	
 	  /*public void getjsondata(Method method) throws Exception {
@@ -48,7 +53,8 @@ public class TC_CreateNewContact extends BaseTest{
 	
   @Test
   public void NewContact() {
-	
+	  System.out.println(getExcelData());
+	  
 	String firstname 	= 	getExcelData().get("FirstName").trim();
 	String lastname 	= 	getExcelData().get("LastName").trim();
 	String company 		=	getExcelData().get("Company").trim();
@@ -58,9 +64,9 @@ public class TC_CreateNewContact extends BaseTest{
 	String source 		=	getExcelData().get("Source").trim();
 	String city 		= 	getExcelData().get("City").trim();
 	String state 		=	getExcelData().get("State").trim();
-	String phnumbr 		=	getExcelData().get("phNumber").trim();
-	String country 		=	getExcelData().get("DOB").trim();
-	String zipcode 		=	getExcelData().get("Country").trim();
+	String phnumbr 		=	getExcelData().get("PhNumber").trim();
+	String country 		=	getExcelData().get("Country").trim();
+	String zipcode 		=	getExcelData().get("ZipCode").trim();
 	
 		  
 	  logincrmpage.logintoCRM();
@@ -81,10 +87,12 @@ public class TC_CreateNewContact extends BaseTest{
 	  
 	  try {
 		  Logger().info("New Contact created");
+		  sc.log("New contact created successfully.");
+		  
 	  }
 	  catch(Exception e) {
 		  
-		  
+		  sc.log("Problem in creating new contact.");
 		  
 		  
 	  }

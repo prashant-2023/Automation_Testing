@@ -28,7 +28,7 @@ public class LoginCRMPage extends BaseTest{
 	public void logintoCRM() {
 		
 		email.sendKeys(prop.getProperty("username"));
-		paswrd.sendKeys(EncryptionUtils.decode(prop.getProperty("password")));
+		paswrd.sendKeys(EncryptionUtils.decode(prop.getProperty("correctpassword")));
 		loginbtn.click();
 		
 	}

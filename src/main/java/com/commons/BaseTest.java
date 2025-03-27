@@ -31,7 +31,8 @@ import org.testng.Reporter;
 
 import com.constants.Constants;
 
-
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
@@ -39,6 +40,13 @@ public class BaseTest {
 	public static Properties prop;
 	static WebDriverWait wait;
 	static WebDriverWait waitMillis;
+	protected Scenario sc;
+	
+	@Before
+    public void setScenario(Scenario scenario) {
+        this.sc = scenario; // Initialized scenario in a cucumber hook so that it can be used in all the classes which extends base class
+    }
+	
 	
 	public static HashMap<Long, WebDriver> map = new HashMap<>();
 
