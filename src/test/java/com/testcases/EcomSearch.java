@@ -7,27 +7,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
-
 import com.applicationPages.EcomSearchPage;
 import com.commons.BaseTest;
+
 
 public class EcomSearch extends BaseTest{
 	
 	EcomSearchPage ecm = new EcomSearchPage();
-
-	public EcomSearch() {
-		// TODO Auto-generated constructor stub
-		
-		super();
-		
-	}
-
+	
+	
+	
 	@Test
 	public void searchProduct() {
-		
+			
 		genericwait(10);
-		
-		
 		
 	ecm.verifyTitle("Testing");
 	
@@ -41,6 +34,7 @@ public class EcomSearch extends BaseTest{
 	
 	Set<String> allWindows = webdriversession().getWindowHandles();
 	
+		
 	for(String window: allWindows) {
 		
 		if(!window.equals(parentWindow)) {

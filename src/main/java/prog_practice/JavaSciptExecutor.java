@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import com.commons.BaseTest;
 
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
@@ -16,7 +16,7 @@ import com.constants.Constants;
 
 public class JavaSciptExecutor {
 
-	WebDriver driver = new ChromeDriver();
+	WebDriver driver = BaseTest.webdriversession();
 
 	@Test
 	public void JavaSciptExecutorMethod() {

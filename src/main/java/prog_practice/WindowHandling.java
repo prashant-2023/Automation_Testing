@@ -5,13 +5,13 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import com.commons.BaseTest;
 import org.testng.annotations.Test;
 
 
 public class WindowHandling {
 
-	WebDriver driver = new ChromeDriver();
+	WebDriver driver = BaseTest.webdriversession();
 	@Test
 	public void WindowHandlingMethod() {
 		// TODO Auto-generated constructor stub

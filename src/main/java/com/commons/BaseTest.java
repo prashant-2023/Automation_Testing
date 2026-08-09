@@ -1,240 +1,206 @@
 package com.commons;
 
-
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriver.Timeouts;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
-
-//import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
-
+import org.testng.annotations.AfterMethod;
 
 import com.constants.Constants;
-
-import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
 
-	public static Properties prop;
-	static WebDriverWait wait;
-	static WebDriverWait waitMillis;
-	protected Scenario sc;
-	
-	@Before
-    public void setScenario(Scenario scenario) {
-        this.sc = scenario; // Initialized scenario in a cucumber hook so that it can be used in all the classes which extends base class
+    public static Properties prop = new Properties();
+    static WebDriverWait wait;
+    protected Scenario sc;
+    
+    // 1. FIXED: Use ThreadLocal instead of a ConcurrentHashMap for thread safety
+    private static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
+    private static final Logger logger = LogManager.getLogger(BaseTest.class);
+    
+    
+    static {
+        try {
+            FileInputStream fip = new FileInputStream(Constants.CONFIG_FILE_PATH);
+            prop.load(fip);
+            Reporter.log("Config file loaded successfully.");
+        } catch (FileNotFoundException e) {
+            Reporter.log("Issue loading config file.", true);
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+       
     }
-	
-	
-	public static HashMap<Long, WebDriver> map = new HashMap<>();
+    
+    public static Logger Logger() {
+        return logger;
+    }
+    
+    public void setScenario(Scenario scenario) {
+        this.sc = scenario;
+    }
+    
+    // 2. FIXED: Retrieve driver from ThreadLocal
+    public static WebDriver webdriversession() {
+        if (tlDriver.get() == null) {
+            try {
+                tlDriver.set(createWebDriver());
+                Logger().info("Driver initialized successfully.");
+            } catch (Exception e) {
+                Logger().error("Issue in initializing driver.", e);
+            }
+        }
+        return tlDriver.get();
+    }
 
-	
-	public BaseTest() {
+    // 3. FIXED: Removed 'synchronized' as ThreadLocal handles thread isolation natively
+    private static WebDriver createWebDriver() {
+        WebDriver driver = null;
+        String browser = prop.getProperty("browser");
+        Reporter.log("Launching browser: " + browser, true);
+        
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments("--remote-allow-origins=*", "--disable-extensions", 
+                                   "--disable-notifications", "--start-maximized", 
+                                   "--disable-save-password-bubble");
+                options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                
+                try {
+                    WebDriverManager.chromedriver().setup();
+                    driver = new ChromeDriver(options);
+                    // Removed driver.get(URL) from here. Let the test/hook handle navigation.
+                } catch(Exception e) {
+                    Reporter.log("Issue in launching Chrome: " + e.getMessage(), true);
+                    Logger().error("Error launching Chrome", e);
+                    
+                }
+                break;
 
-		try {
-			FileInputStream fip = new FileInputStream(Constants.CONFIG_FILE_PATH);
-			prop = new Properties();
-			prop.load(fip);
+            case "firefox":
+                FirefoxOptions fireOpt = new FirefoxOptions();
+                WebDriverManager.firefoxdriver().setup();
+                driver = new org.openqa.selenium.firefox.FirefoxDriver(fireOpt);
+                break;
 
-		} catch (FileNotFoundException e) {
-		
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                driver = new org.openqa.selenium.edge.EdgeDriver();
+                break;
 
-	}
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+        }
 
-	
-		public static Logger Logger() {
-			
-			Logger log = LogManager.getLogger(BaseTest.class.getName());
-			return log;
-			
-		}
-		
-		
-		public static synchronized WebDriver webdriversession() {
-	        Long threadId = Thread.currentThread().getId();
-	        WebDriver driver = map.get(threadId);
-	        
-	        if (driver == null) {
-	            try {
-	                driver = setupWebDriver();
-	                map.put(threadId, driver);
-	            } catch (InterruptedException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	        return driver;
-	    }
+        if (driver != null) {
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Constants.PAGE_LOAD_TIMEOUT));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.IMPLICIT_WAIT_TIMEOUT));
+            wait = new WebDriverWait(driver, Duration.ofSeconds(Constants.WEBDRIVER_WAIT_TIMEOUT));
+            
+            driver.manage().deleteAllCookies();
+            
+            // Navigate to URL once the driver is fully set up
+            driver.get(prop.getProperty("crmURL"));
+        }
+        
+        return driver;
+    }
 
+    // 4. ADDED: A safe teardown method to prevent zombie processes
+    public static void quitDriver() {
+        if (tlDriver.get() != null) {
+            tlDriver.get().quit();
+            tlDriver.remove(); // Crucial: removes the instance so the next test gets a fresh browser
+        }
+    }
+    
+ // Inside BaseTest.java
+    @AfterMethod(alwaysRun = true)
+    public void closebrowser() {
+        quitDriver(); // Calls the ThreadLocal cleanup we created earlier
+    }
 
-		public static synchronized WebDriver setupWebDriver() throws InterruptedException {
-	        WebDriver driver = null;
-	        ChromeOptions options = new ChromeOptions();
-	        FirefoxOptions fireOpt = new FirefoxOptions();
-
-	        String browser = prop.getProperty("browser");
-	        
-	        switch (browser.toLowerCase()) {
-	            case "chrome":
-	                options.addArguments("--disable-extensions", "--disable-notifications", "--start-maximized", "--disable-save-password-bubble");
-	                options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-	                options.addArguments("--disable-Save-password-bubble");
-	                driver = WebDriverManager.chromedriver().capabilities(options).create();
-	                driver.get(prop.getProperty("crmURL"));
-	                break;
-
-	            case "firefox":
-	                driver = WebDriverManager.firefoxdriver().capabilities(fireOpt).create();
-	                driver.get(prop.getProperty("crmURL"));
-	                break;
-
-	            case "edge":
-	                driver = WebDriverManager.edgedriver().create();
-	                driver.get(prop.getProperty("crmURL"));
-	                break;
-
-	            default:
-	                throw new IllegalArgumentException("Unsupported browser: " + browser);
-	        }
-
-	        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Constants.PAGE_LOAD_TIMEOUT));
-	        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.IMPLICIT_WAIT_TIMEOUT));
-	        wait = new WebDriverWait(driver, Duration.ofSeconds(Constants.WEBDRIVER_WAIT_TIMEOUT));
-	        waitMillis = new WebDriverWait(driver, Duration.ofMillis(Constants.WEBDRIVER_WAIT_TIMEOUT));
-	        driver.manage().deleteAllCookies();
-	       // map.put(Thread.currentThread().getId(), driver);
-	        return driver;
-	    }
-
-	public void countLinksonWebPage() {
-
-
-		List<WebElement> links = webdriversession().findElements(By.tagName("a"));
-		//List<WebElement> checkboxes = webdriversession().findElements(By.xpath("//*[@type=\"checkbox\"]"));
-		
-		//List<WebElement> activelinks = webdriversession().findElements(By.tagName("a"));
-		
-		
-		int count = 0;
-
-		System.out.println("Total no. of links on the webpage is : " + links.size());
-
-		for (WebElement link: links)
-		{
-
-			count++;	
-			
-			System.out.println(link.getText());
-
-		}
-		System.out.println(count);
-	}
-	public void countCheckBoxes() {
-
-
-
-		List<WebElement> checkboxes = webdriversession().findElements(By.xpath("//*[@type=\"checkbox\"]"));
-
-		int count = 1;
-
-		System.out.println("Total no. of checkboxes on the page are : " + checkboxes.size());
-
-		for (int i = 0; i<checkboxes.size(); i++)
-		{
-
-
-			System.out.println(count);
-			System.out.println(checkboxes.get(i).getAttribute("value"));
-			count++;
-
-
-		}
-	}
-	public boolean mouseHover(WebElement element) {
-		
-		boolean flag = false;
-
-		Actions action = new Actions(webdriversession());
-		
-				
-		try {
-			action.moveToElement(element).build().perform();
-			flag=true;
-			Reporter.log("Mouse Hovered action performed.");
-		}
-		catch(StaleElementReferenceException e) {
-			
-			Reporter.log("Error in mouse hover at " + element);
-			e.printStackTrace();
-			
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return flag;
-	
-	}
-	
-	public void genericwait(long s) {
-		
-		try {
-			Thread.sleep(s);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void selectStatus(String status) {
-		
-		genericwait(3000);
-		
-		WebElement statusdrpdwn = webdriversession().findElement(By.cssSelector("div[name='status'][role='listbox']"));
-		statusdrpdwn.click();
-		WebElement statusOption = webdriversession().findElement(By.xpath("//*[@name='status' and @role='listbox']//span[contains(text(),'" + status + "')]"));
-		statusOption.click();
-		
-	}
-	
-	public void selectSource(String option) {
-		
-		WebElement source_drpdwn = webdriversession().findElement(By.xpath("//*[@name='source' and @class='ui selection dropdown']"));
-		
-		source_drpdwn.click();
-		
-		WebElement srcOption = webdriversession().findElement(By.xpath("//*[@name='source' and @role='listbox']//span[contains(text(),'" + option +"')]"));
-		srcOption.click();
-	}
-	
-	
-
-
+    // --- Utility Methods Below --- //
+    
+    public void countLinksonWebPage(String tagname) {
+        List<WebElement> links = webdriversession().findElements(By.tagName(tagname));
+        int count = 0;
+        System.out.println("Total no. of links on the webpage is : " + links.size());
+        for (WebElement link: links) {
+            count++;    
+            System.out.println(link.getText());
+        }
+        System.out.println(count);
+    }
+    
+    public void countCheckBoxes() {
+        List<WebElement> checkboxes = webdriversession().findElements(By.xpath("//*[@type=\"checkbox\"]"));
+        int count = 1;
+        System.out.println("Total no. of checkboxes on the page are : " + checkboxes.size());
+        for (WebElement checkbox : checkboxes) {
+            System.out.println(count);
+            System.out.println(checkbox.getAttribute("value"));
+            count++;
+        }
+    }
+    
+    public boolean mouseHover(WebElement element) {
+        boolean flag = false;
+        Actions action = new Actions(webdriversession());
+        try {
+            action.moveToElement(element).build().perform();
+            flag = true;
+            Reporter.log("Mouse Hovered action performed.");
+        } catch(StaleElementReferenceException e) {
+            Reporter.log("Error in mouse hover at " + element);
+            e.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+    
+    public void genericwait(long s) {
+        try {
+            Thread.sleep(s);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void selectStatus(String status) {
+        genericwait(3000); // Consider replacing this with an Explicit Wait later
+        WebElement statusdrpdwn = webdriversession().findElement(By.cssSelector("div[name='status'][role='listbox']"));
+        statusdrpdwn.click();
+        WebElement statusOption = webdriversession().findElement(By.xpath("//*[@name='status' and @role='listbox']//span[contains(text(),'" + status + "')]"));
+        statusOption.click();
+    }
+    
+    public void selectSource(String option) {
+        WebElement source_drpdwn = webdriversession().findElement(By.xpath("//*[@name='source' and @class='ui selection dropdown']"));
+        source_drpdwn.click();
+        WebElement srcOption = webdriversession().findElement(By.xpath("//*[@name='source' and @role='listbox']//span[contains(text(),'" + option +"')]"));
+        srcOption.click();
+    }
 }
-
-

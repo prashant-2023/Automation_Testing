@@ -9,25 +9,26 @@ import io.cucumber.java.en.Given;
 
 public class NewContactDefinition extends BaseTest{
 	
-	//TC_CreateNewContact newContact;
+	TC_CreateNewContact newContact;
 		
 		
 	@Given("Create new contact")
 	public void newcontact() throws Throwable{
 		
 		try {
-			webdriversession();
-			sc.log("URL launched successfully");
+			//webdriversession();
+			newContact = new TC_CreateNewContact();
+			newContact.NewContact();
+			sc.log("New contact created successfully");
 			
 		}
 		catch(Exception e){
 			
-			sc.log("Issue in launching URL");
+			sc.log("Issue in creating new contact.");
 		}
 		
 		
-		TC_CreateNewContact tc_CreateNewContact = new TC_CreateNewContact();
-		tc_CreateNewContact.NewContact();
+		
 		
 		
 	}

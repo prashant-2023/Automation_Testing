@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Automation CRM Suite" verbose="2">
-	<listeners>
-		<listener class-name="com.utils.TestListener">
-		</listener>
-	</listeners>
 	
-	<test name="searchProduct" enabled="false">	
+	
+	<test name = "CreateNewContact" enabled="true">
+	
 	<classes>	
-	<class name = "com.testcases.EcomSearch"></class>	
-	</classes>	
-	</test>
 	
+	<class name="com.testcases.TC_CreateNewContact"></class>	
+	</classes>
+	
+	</test>
+		
 	<test name = "CreateNewCompany" enabled="false">	
 	<classes>	
 	<class name="com.testcases.TC_CreateNewCompany"></class>	
@@ -21,15 +21,7 @@
 	</test>
 	
 	
-	<test name = "CreateNewContact" enabled="true">
 	
-	<classes>
-	
-	<class name="com.testcases.TC_CreateNewContact"></class>
-	
-	</classes>
-	
-	</test>
 	
 	<test name="VerifyLogin" enabled="false">
 	<classes>

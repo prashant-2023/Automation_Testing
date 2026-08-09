@@ -10,9 +10,12 @@ import com.utils.ExcelReader;
 import com.utils.JSONReader;
 import com.utils.TestUtils;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
 import org.testng.annotations.BeforeMethod;
+//import org.testng.annotations.Test;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
@@ -31,17 +34,12 @@ public class TC_CreateNewContact extends BaseTest{
 	
 	
 	String sheet = this.getClass().getSimpleName().substring(3);
-	ExcelReader reader = new ExcelReader();
-	
+	//ExcelReader reader = new ExcelReader();
 	
 	@BeforeMethod
-	public Map<String,String> getExcelData() {
-		
-		
-						
-		return reader.readExcelData(sheet);
-		
-		
+	public void getjsondata(Method method) throws Exception {
+
+		parentnodetestdata = JSONReader.getparentnodedata(method.getName());
 	}
 	
 	  /*public void getjsondata(Method method) throws Exception {
@@ -53,20 +51,20 @@ public class TC_CreateNewContact extends BaseTest{
 	
   @Test
   public void NewContact() {
-	  System.out.println(getExcelData());
+	 // System.out.println(parentnodetestdata);
 	  
-	String firstname 	= 	getExcelData().get("FirstName").trim();
-	String lastname 	= 	getExcelData().get("LastName").trim();
-	String company 		=	getExcelData().get("Company").trim();
-	String email 		=	getExcelData().get("Email").trim();
-	String address 		=	getExcelData().get("Address").trim();
-	String status 		= 	getExcelData().get("Status").trim();
-	String source 		=	getExcelData().get("Source").trim();
-	String city 		= 	getExcelData().get("City").trim();
-	String state 		=	getExcelData().get("State").trim();
-	String phnumbr 		=	getExcelData().get("PhNumber").trim();
-	String country 		=	getExcelData().get("Country").trim();
-	String zipcode 		=	getExcelData().get("ZipCode").trim();
+	String firstname 	= 	parentnodetestdata.get("FirstName").toString();
+	String lastname 	= 	parentnodetestdata.get("LastName").toString();
+	String company 		=	parentnodetestdata.get("Company").toString();
+	String email 		=	parentnodetestdata.get("Email").toString();
+	String address 		=	parentnodetestdata.get("Address").toString();
+	String status 		= 	parentnodetestdata.get("Status").toString();
+	String source 		=	parentnodetestdata.get("Source").toString();
+	String city 		= 	parentnodetestdata.get("City").toString();
+	String state 		=	parentnodetestdata.get("State").toString();
+	String phnumbr 		=	parentnodetestdata.get("PhNumber").toString();
+	String country 		=	parentnodetestdata.get("Country").toString();
+	String zipcode 		=	parentnodetestdata.get("ZipCode").toString();
 	
 		  
 	  logincrmpage.logintoCRM();
@@ -85,28 +83,10 @@ public class TC_CreateNewContact extends BaseTest{
 	  
 	 // TestUtils.takeScreenshot("New_Contact");
 	  
-	  try {
-		  Logger().info("New Contact created");
-		  sc.log("New contact created successfully.");
-		  
-	  }
-	  catch(Exception e) {
-		  
-		  sc.log("Problem in creating new contact.");
-		  
-		  
-	  }
-	  
+	   
 	  
 	 
   }
   
-
-  @AfterMethod
-  public void closebrowser() {
-	  
-	  webdriversession().close();
-	  map.remove(Thread.currentThread(), webdriversession());
-  }
 
 }

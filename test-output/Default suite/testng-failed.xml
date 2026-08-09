@@ -3,11 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Wipro.MySeleniumProject.TC_1_AddToCart">
+      <class name="com.testcases.TC_CreateNewDeal">
         <methods>
-          <include name="launchURL"/>
+          <include name="getjsondata"/>
+          <include name="CreateNewDeal"/>
+          <include name="closebrowser"/>
         </methods>
-      </class> <!-- Wipro.MySeleniumProject.TC_1_AddToCart -->
+      </class> <!-- com.testcases.TC_CreateNewDeal -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

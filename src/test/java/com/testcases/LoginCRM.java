@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.applicationPages.*;
@@ -20,7 +21,7 @@ import com.utils.TestUtils;
 public class LoginCRM extends BaseTest{
 	
 	Method method;
-	JSONObject parentnodetestdata;
+	//JSONObject parentnodetestdata;
 	
 	
 	LoginCRMPage logincrmpage;
@@ -33,21 +34,21 @@ public class LoginCRM extends BaseTest{
 	@BeforeMethod
 	public void readtestdata(Method method) throws Exception {
 		
-		parentnodetestdata = JSONReader.getparentnodedata(method.getName());
+		//parentnodetestdata = JSONReader.getparentnodedata(method.getName());
 		
 		webdriversession().get(prop.getProperty("crmURL"));
 		
 	}
 	
-	@Test
-	public void CRMlogin() {
+	@Test(dataProvider="loginCRM", dataProviderClass = DataProvider.class)
+	public void CRMlogin(String usrname, String paswd) {
 		
 		
 		//******************Fetching data from parent node of json**************//
 		
-		String usrname = parentnodetestdata.get("UserName").toString();
+		/*String usrname = parentnodetestdata.get("UserName").toString();
 		String paswd = parentnodetestdata.get("Password").toString();
-
+*/
 		logincrmpage = new LoginCRMPage();
 		landingcrmpage = new LandingCRMPage();
 

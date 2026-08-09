@@ -1,6 +1,7 @@
 package com.utils;
 
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,12 +42,12 @@ public class JSONReader {
 	public static JSONObject getparentnodedata(String parentnodeName) throws Exception{
 		
 		JSONParser parser = new JSONParser();
-		FileReader reader;
-		
-			reader = new FileReader(Constants.TEST_DATA_FILEPATH + "testdata.json");
+		FileReader reader= new FileReader(Constants.TEST_DATA_FILEPATH + "testdata.json");
 		
 			JSONObject obj = (JSONObject)	parser.parse(reader);
+			
 			JSONObject parentnodedata = (JSONObject)obj.get(parentnodeName);
+			
 			
 		
 		return parentnodedata;
@@ -55,12 +56,6 @@ public class JSONReader {
 	
 	public static JSONObject getchildnodedata(String parentnodeName, String childnodename) throws Exception {
 		
-		/*JSONParser parser = new JSONParser();
-		FileReader reader;
-		
-			reader = new FileReader(Constants.TEST_DATA_FILEPATH + "testdata.json");
-		
-			JSONObject obj = (JSONObject)	parser.parse(reader);*/
 			
 			JSONObject parentnodedata = getparentnodedata(parentnodeName);
 			

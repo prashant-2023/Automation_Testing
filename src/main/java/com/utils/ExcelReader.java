@@ -41,10 +41,11 @@ public class ExcelReader {
 	public  Map<String, String> readExcelData(String sheetname){
 
 		Map<String, String> map = new LinkedHashMap<>();
-
+		//create a file input stream to read the excel file
 		try(FileInputStream fis = new FileInputStream(filepath);
+				//create a workbook object and pass fis object to it
 				XSSFWorkbook wb = new XSSFWorkbook(fis);) {
-
+			//get the sheet from workbook and store it in sheet object
 			XSSFSheet sheet = wb.getSheet(sheetname);
 
 
@@ -53,7 +54,7 @@ public class ExcelReader {
 				throw new RuntimeException("No sheet available.");
 			}
 
-
+			//iterate till the last row of the sheet
 			for(int i=0; i<=sheet.getLastRowNum();i++) {
 
 				XSSFRow row = sheet.getRow(i);
@@ -96,7 +97,7 @@ public class ExcelReader {
 		}
 
 
-
+		//return the map with the key value pairs from the excel sheet
 		return map;
 
 

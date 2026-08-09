@@ -20,6 +20,11 @@ import com.commons.BaseTest;
 
 public class TestUtils extends BaseTest{
 	
+	public static void testMethod() {
+		
+		System.out.println("test static method");
+	}
+	
 	
 	public static String switchToChildWindow() {
 		
@@ -47,14 +52,6 @@ public class TestUtils extends BaseTest{
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

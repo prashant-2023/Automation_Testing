@@ -2,6 +2,7 @@ package prog_practice;
 
 import java.util.Collections;
 import java.util.HashMap.*;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -15,9 +16,57 @@ import javax.xml.stream.events.Characters;
 public class StringPractice {
 	//IP- This is a good day
 	//OP- yadd oo g asis ihT
+	// Str = Aut%m@t*i$o#n
+	//OP = n#o$i*t@m%tuA
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//Create a function to count the number of vowels and consonants in a given string.
+
+	public static void countVowelsAndConsonents(String s) {
+		
+		//char[] letters = s.toLowerCase().toCharArray();
+		String input = s.toLowerCase();
+		
+		Set<Character> vowels = new HashSet<>();
+		
+		Collections.addAll(vowels, 'a','e','i','o','u');
+		
+		int vowelCount=0;
+		int consonentCount=0;
+		
+		for(char c: input.toCharArray()) {
+			
+			
+			if(vowels.contains(c)) {
+				
+				vowelCount++;
+			}
+			else {
+				consonentCount++;
+			}
+			
+		}
+		System.out.println("Vowels are: " + vowelCount + "\nConsonents are: " + consonentCount);
+		
+		
+		
+		
+	}
 	
 	
 	
@@ -332,14 +381,107 @@ public static char firstNonRepeatingChar(String s) {
 		
 		
 	}
+
+	public static void counter(String s) {
+	
+		s.toLowerCase();
+	
+		int vowelCount = 0;
+		int consCount = 0;
+	
+	
+		for(char c: s.toCharArray()) {
+	
+			if("aeiou".indexOf(c)!=-1) {
+	
+				vowelCount++;
+	
+			}else {
+				consCount++;
+			}
+	
+	
+		}
+		System.out.println("Vowel count is: " + vowelCount + " Consonant count is: " + consCount);
+	
+	
+	
+	}
+	
+	public static String reverseOnlyLetters(String str) {
+		
+		char[] ch = str.toCharArray();	
+		
+		int left =0;
+		int right = ch.length-1;
+		char temp;
+		
+		while(left<right) {
+			
+			if(!(Character.isAlphabetic(ch[left]))) {
+				
+				left++;
+				
+				
+			}else if(!Character.isAlphabetic(ch[right])) {
+				
+				right--;
+			}
+			
+			else {
+				
+				temp= ch[right];
+				ch[right]=ch[left];
+				ch[left] = temp;
+				left++;
+				right--;
+			}
+			
+					
+		}
+		
+		
+		return new String(ch);
+		
+		
+		
+	}
 	
 	public static void main(String[] args) {
 		
 		//String s = "This is reference number #12345 for 'account' 'prashant87'";
-		String s = "WeeksFourThousand";
+		String str = "Fou r Thou sand Weeks";
+		char[] ch = str.toCharArray();
+		
+	//	System.out.println(reverseOnlyLetters(str));
+		
+		int left=0;
+		int right =  ch.length-1;
+		
+		while(left<right) {
+			
+			if(ch[left] != ' ') {
+				
+				char temp= ch[right];
+				ch[right]=ch[left];
+				ch[left] = temp;
+				left++;
+				right--;
+				
+			}
+			
+			
+		}
+		
+		System.out.println(new String(str));
+		
+		
+		//countVowelsAndConsonents(str);
+		
+		
 		//removeDuplicates(s);
 		
-		System.out.println(firstNonRepeatingChar(s));
+		//counter(str);
 		/*
 		try { 
 		

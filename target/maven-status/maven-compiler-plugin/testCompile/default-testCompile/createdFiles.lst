@@ -1,0 +1,14 @@
+com\testcases\TC_1_AddToCart.class
+com\testcases\LoginCRM.class
+com\testcases\TC_CreateNewContact.class
+com\testcases\SimpleTest.class
+stepDefinitions\NewContactDefinition.class
+stepDefinitions\DemoDefinitionClass.class
+com\testcases\NewLead.class
+com\testcases\TC_CreateNewDeal.class
+com\testcases\TC_CreateNewCompany.class
+com\restassured\RestAPITesting.class
+com\testcases\EcomSearch.class
+stepDefinitions\CucumberTestRunner.class
+com\testcases\ValidateLogin.class
+com\testcases\SHL_Assessment.class

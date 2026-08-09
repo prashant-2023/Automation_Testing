@@ -11,6 +11,7 @@ public class NewLead extends BaseTest{
 	loginPage login = new loginPage();
 	LandingPage landingpage = new LandingPage();
 	LeadsLandingPage leadslandingpage = new LeadsLandingPage();
+	LoginCRMPage logincrmpage = new LoginCRMPage();
 	
 	public NewLead() {
 
@@ -20,7 +21,8 @@ public class NewLead extends BaseTest{
 	public void createNewLead() {
 		
 		//webdriversession().get(prop.getProperty("appFourURL"));
-		login.login();
+		logincrmpage.logintoCRM();
+		//login.login();
 		landingpage.verifyLandingPage();
 		
 		landingpage.clickonleadBtn();

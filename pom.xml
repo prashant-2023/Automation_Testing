@@ -15,13 +15,26 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 
 
 	<dependencies>
+		
+		<dependency>
+		    <groupId>com.aventstack</groupId>
+		    <artifactId>extentreports</artifactId>
+		    <version>5.0.9</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>tech.grasshopper</groupId>
+		    <artifactId>extentreports-cucumber6-adapter</artifactId>
+		    <version>2.10.2</version>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
 		<dependency>
@@ -45,13 +58,33 @@
 			<version>7.13.0</version>
 			<scope>test</scope>
 		</dependency>
-
+		
+		<dependency>
+        <groupId>net.masterthought</groupId>
+        <artifactId>cucumber-reporting</artifactId>
+        <version>5.7.6</version>
+    </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/io.cucumber/messages -->
+		<!-- https://mvnrepository.com/artifact/io.cucumber/messages -->
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>messages</artifactId>
+    <version>21.0.1</version>
+</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+	<dependency>
+	    <groupId>com.google.protobuf</groupId>
+	    <artifactId>protobuf-java</artifactId>
+	    <version>3.21.12</version>
+	</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>3.0.0-alpha1</version>
+			<version>2.21.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
@@ -69,22 +102,29 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>3.0.0-alpha1</version>
+			<version>2.21.1</version>
 		</dependency>
 
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>2.0.0-alpha0</version>
-			<scope>runtime</scope>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j2-impl</artifactId>
+			<version>2.21.1</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.30</version>  <!-- Use latest version -->
+		    <scope>provided</scope>
+		</dependency>
+
 
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>2.0.0-alpha0</version>
+			<version>2.0.9</version>
 		</dependency>
 
 
@@ -100,7 +140,7 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>7.9.0</version>
+			<version>7.11.0</version>
 			
 		</dependency>
 
@@ -110,10 +150,17 @@
 
 		<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>5.6.0</version>
+			<version>5.7.0</version>
 
 
 		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>31.1-jre</version> <!-- Or a known-good recent version -->
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
 		<dependency>
@@ -162,13 +209,12 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.1</version>
+					<version>3.2.3</version>
 					<configuration>
 						<suiteXmlFiles>
-						<suiteXmlFile> D:\SeleniumData\MySeleniumProject\runner.xml</suiteXmlFile>
-					</suiteXmlFiles>
+							<suiteXmlFile>${basedir}/runner.xml</suiteXmlFile>
+						</suiteXmlFiles>
 					</configuration>
-					
 				</plugin>
 				<plugin>
 					<artifactId>maven-jar-plugin</artifactId>

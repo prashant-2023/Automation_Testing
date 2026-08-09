@@ -30,10 +30,7 @@ public class ValidateLogin extends BaseTest{
 	LoginCRMPage logincrmpage;
 	LandingCRMPage landingcrmpage;
 
-	public ValidateLogin() {
-
-		super();
-	}
+	
 	@BeforeMethod
 	public void readtestdata(Method method) throws Exception {
 		
