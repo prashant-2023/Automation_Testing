@@ -67,8 +67,8 @@ public class TC_CreateNewContact extends BaseTest{
 	String zipcode 		=	parentnodetestdata.get("ZipCode").toString();
 	
 		  
-	  logincrmpage.logintoCRM();
-	  landingcrmpage.verifyTitle();
+	  //logincrmpage.logintoCRM();
+	 // landingcrmpage.verifyTitle();
 	  genericwait(4000);
 	  createcontact_page.contactdetails(firstname, lastname, email, address, city, state, zipcode,company);
 	

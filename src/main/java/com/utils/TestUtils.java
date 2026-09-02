@@ -6,6 +6,8 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -69,22 +71,49 @@ public class TestUtils extends BaseTest{
 	}
 	
 	
-	public static void takeSnapShot(String filename){
-		//Convert web driver object to TakeScreenshot
-		try {
-			TakesScreenshot scrnshot = (TakesScreenshot) webdriversession();
-			File srcFile = scrnshot.getScreenshotAs(OutputType.FILE);
-			String imagePath = System.getProperty("user.dir")  + File.separator + filename +"_" + System.currentTimeMillis()+ ".png";
-			
-			Files.createDirectories(Paths.get(System.getProperty("user.dir")+ "\\Screenshots" ));
-			
-			FileUtils.copyFile(srcFile, Paths.get(imagePath).toFile());
-		}catch(Exception e) {
-			
-			System.out.println("Failed to capture screenshot: " + e.getMessage());
-		}
+	/**
+	 * Captures and saves a screenshot to the Screenshots folder with timestamp
+	 * @param filename - Base filename for the screenshot (timestamp will be added)
+	 * @return - Full path to saved screenshot, or null if failed
+	 */
+	public static String takeSnapShot(String filename){
+		String screenshotPath = null;
 		
-}
+		try {
+			// 1. Create Screenshots directory if it doesn't exist
+			String screenshotsDir = System.getProperty("user.dir") + File.separator + "Screenshots";
+			Files.createDirectories(Paths.get(screenshotsDir));
+			
+			// 2. Generate filename with timestamp to avoid overwrites
+			String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS").format(new Date());
+			screenshotPath = screenshotsDir + File.separator + filename + "_" + timestamp + ".png";
+			
+			// 3. Capture screenshot
+			TakesScreenshot screenshot = (TakesScreenshot) webdriversession();
+			File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
+			
+			// 4. Copy to target location
+			File destinationFile = new File(screenshotPath);
+			FileUtils.copyFile(sourceFile, destinationFile);
+			
+			// 5. Verify file was created
+			if (destinationFile.exists()) {
+				BaseTest.Logger().info("✓ Screenshot saved successfully at: " + screenshotPath);
+				System.out.println("[SUCCESS] Screenshot saved: " + screenshotPath);
+				return screenshotPath;
+			} else {
+				BaseTest.Logger().warn("Screenshot file was not created at: " + screenshotPath);
+				System.out.println("[WARNING] Screenshot file was not created");
+				return null;
+			}
+			
+		} catch (Exception e) {
+			BaseTest.Logger().error("Failed to capture/save screenshot for: " + filename, e);
+			System.out.println("[ERROR] Failed to capture screenshot: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
 		  
 	
 	

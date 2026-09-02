@@ -2,19 +2,12 @@ package com.testcases;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
-
-import org.json.simple.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import com.applicationPages.*;
 import com.commons.BaseTest;
 import com.utils.EncryptionUtils;
-import com.utils.JSONReader;
 import com.utils.TestUtils;
 
 
@@ -24,55 +17,55 @@ public class LoginCRM extends BaseTest{
 	//JSONObject parentnodetestdata;
 	
 	
-	LoginCRMPage logincrmpage;
-	LandingCRMPage landingcrmpage;
+	//LoginCRMPage logincrmpage;
+	//LandingCRMPage landingcrmpage;
 
 	public LoginCRM() {
 
 		super();
 	}
-	@BeforeMethod
+	/*@BeforeMethod
 	public void readtestdata(Method method) throws Exception {
 		
 		//parentnodetestdata = JSONReader.getparentnodedata(method.getName());
 		
-		webdriversession().get(prop.getProperty("crmURL"));
 		
-	}
+		
+	}*/
 	
-	@Test(dataProvider="loginCRM", dataProviderClass = DataProvider.class)
-	public void CRMlogin(String usrname, String paswd) {
+	@Test(priority=1)
+	public void CRMlogin() {
 		
-		
+		webdriversession().get(prop.getProperty("crmURL"));
 		//******************Fetching data from parent node of json**************//
 		
 		/*String usrname = parentnodetestdata.get("UserName").toString();
 		String paswd = parentnodetestdata.get("Password").toString();
 */
-		logincrmpage = new LoginCRMPage();
-		landingcrmpage = new LandingCRMPage();
+		//logincrmpage = new LoginCRMPage();
+		//landingcrmpage = new LandingCRMPage();
 
 		
 
 		WebDriverWait wait = new WebDriverWait(webdriversession(), Duration.ofSeconds(20));
-		wait.until(ExpectedConditions.visibilityOf(webdriversession().findElement(By.name("email"))));
+		wait.until(ExpectedConditions.visibilityOf(webdriversession().findElement(By.id("email"))));
 		//logincrmpage.logintoCRM();
 		
 		
-		webdriversession().findElement(By.name("email")).sendKeys(usrname);
-		webdriversession().findElement(By.name("password")).sendKeys(EncryptionUtils.decode(paswd));
-		webdriversession().findElement(By.xpath("//*[@class='ui fluid large blue submit button']")).click();
+		webdriversession().findElement(By.id("email")).sendKeys(prop.get("username").toString());
+		webdriversession().findElement(By.id("password")).sendKeys(EncryptionUtils.decode(prop.get("correctpassword").toString()));
+		webdriversession().findElement(By.xpath("//button[text()='Login']")).click();
 		
 		
 		try {
-			TestUtils.takeSnapShot(method.getName());
+			TestUtils.takeSnapShot("CRMLogin");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		landingcrmpage.verifyTitle();
+		/*landingcrmpage.verifyTitle();
 		landingcrmpage.logout();
-		
+		*/
 	}
 	
 

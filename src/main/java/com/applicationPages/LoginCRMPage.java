@@ -20,7 +20,8 @@ public class LoginCRMPage extends BaseTest{
 		PageFactory.initElements(webdriversession(), this);
 	}
 	
-	@FindBy (xpath="//input[@id='email']")
+
+	@FindBy (xpath="//*[@id=\"email\"]")
 	WebElement email;
 	
 	@FindBy (xpath="//input[@id='password']")

@@ -51,7 +51,7 @@ public class TC_CreateNewCompany extends BaseTest{
 		//Map<String,String> map = excelreader.readExcelData("CreateNewCompany");
 		//String name = map.get("Name");
 
-		logincrmpage.logintoCRM();
+		//logincrmpage.logintoCRM();
 		
 		SoftAssert softassert = new SoftAssert();
 		softassert.assertTrue(landingcrmpage.verifyTitle());
