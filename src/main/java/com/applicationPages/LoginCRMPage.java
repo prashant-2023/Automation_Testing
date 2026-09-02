@@ -20,13 +20,13 @@ public class LoginCRMPage extends BaseTest{
 		PageFactory.initElements(webdriversession(), this);
 	}
 	
-	@FindBy (xpath="//input[@placeholder='Email']")
+	@FindBy (xpath="//input[@id='email']")
 	WebElement email;
 	
-	@FindBy (name="password")
+	@FindBy (xpath="//input[@id='password']")
 	WebElement paswrd;
 	
-	@FindBy (xpath="//*[@class='ui fluid large blue submit button']")
+	@FindBy (xpath="//button[text()='Login']")
 	WebElement loginbtn;
 	
 	@FindBy (xpath= "//iframe[@title=\"Sign in with Google Button\"]")
