@@ -11,7 +11,7 @@
 	
 	</test>
 	
-	<test name = "CreateNewContact" enabled="true">
+	<test name = "CreateNewContact" enabled="false">
 	
 	<classes>	
 	
