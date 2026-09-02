@@ -35,7 +35,7 @@
 	
 	
 	
-	<test name="loginintoCRM" enabled="false">
+	<test name="loginintoCRM" enabled="true">
 	<classes>
 	
 	<class name="com.testcases.LoginCRM"></class>
