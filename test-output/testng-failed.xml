@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite thread-count="2" parallel="methods" name="Failed suite [Automation CRM Suite]" guice-stage="DEVELOPMENT" verbose="2">
-  <test thread-count="2" parallel="methods" name="CreateNewContact(failed)" verbose="2">
+<suite name="Failed suite [Automation CRM Suite]" guice-stage="DEVELOPMENT" verbose="2">
+  <test thread-count="5" name="CreateNewContact(failed)" verbose="2">
     <classes>
       <class name="com.testcases.TC_CreateNewContact">
         <methods>
           <include name="getjsondata"/>
-          <include name="NewContact"/>
           <include name="closebrowser"/>
+          <include name="NewContact"/>
         </methods>
       </class> <!-- com.testcases.TC_CreateNewContact -->
     </classes>

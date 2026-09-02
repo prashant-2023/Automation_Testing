@@ -3,13 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.testcases.TC_CreateNewDeal">
+      <class name="com.restassured.RestAPITesting">
         <methods>
-          <include name="getjsondata"/>
-          <include name="CreateNewDeal"/>
-          <include name="closebrowser"/>
+          <include name="RestAPITestingDemo"/>
         </methods>
-      </class> <!-- com.testcases.TC_CreateNewDeal -->
+      </class> <!-- com.restassured.RestAPITesting -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

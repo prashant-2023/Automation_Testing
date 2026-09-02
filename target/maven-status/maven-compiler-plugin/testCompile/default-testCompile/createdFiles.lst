@@ -7,6 +7,7 @@ stepDefinitions\DemoDefinitionClass.class
 com\testcases\NewLead.class
 com\testcases\TC_CreateNewDeal.class
 com\testcases\TC_CreateNewCompany.class
+com\utils\LocatorDiscoveryDemo.class
 com\restassured\RestAPITesting.class
 com\testcases\EcomSearch.class
 stepDefinitions\CucumberTestRunner.class

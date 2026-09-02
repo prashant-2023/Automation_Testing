@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -71,7 +72,7 @@ public class CreateContactPage extends BaseTest{
 	
 	public void contactdetails(String fname, String lname, String email, String address, String city, String state, String zipcode, String comp ) {
 	
-		mouseHover(contactBtn);
+		//mouseHover(contactBtn);
 		contactBtn.click();
 		createBtn.click();
 		
@@ -152,6 +153,12 @@ public class CreateContactPage extends BaseTest{
 		e.click();
 		s.selectByVisibleText(text);
 		
+		
+	}
+	
+	public static void switchToNewTab() {
+		
+		webdriversession().switchTo().newWindow(WindowType.TAB);
 		
 	}
 }

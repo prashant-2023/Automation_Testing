@@ -44,7 +44,7 @@ public class TC_CreateNewDeal extends BaseTest{
 		String zipcode =parentnodetestdata.get("ZipCode").toString();
 		String industry =parentnodetestdata.get("Industry").toString();*/
 
-		logincrmpage.logintoCRM();
+		//logincrmpage.logintoCRM();
 		//landingcrmpage.verifyTitle();
 
 		newdealpage.enterDealData(dealname, compname, product);

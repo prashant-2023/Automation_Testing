@@ -14,13 +14,13 @@ import io.cucumber.java.en.When;
 public class DemoDefinitionClass extends BaseTest{
 						WebDriver driver;
 		
-						@Given("launching {string} app")
-						public void launchURL(String url) throws Throwable {
-							// Use the centralized WebDriver from BaseTest instead of creating a new ChromeDriver
-							driver = webdriversession();
-							driver.manage().window().maximize();
-							driver.get(url);
-						}
+	@Given("launching {string} app")
+	public void launchURL(String url) throws Throwable {
+		// Use the centralized WebDriver from BaseTest instead of creating a new ChromeDriver
+		driver = webdriversession();
+		driver.manage().window().maximize();
+		driver.get(url);
+	}
 
   @When("you are in when annotation")
   public void when() throws Throwable {

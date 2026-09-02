@@ -1,14 +1,17 @@
 prog_practice\ShiftZeros.class
 com\utils\JSONReader.class
 prog_practice\B.class
+prog_practice\ShadowDomTest.class
 prog_practice\DemoEnum$1.class
 prog_practice\EqualsMethodDemo.class
 prog_practice\TCSInterview.class
 prog_practice\CodingPractice.class
+prog_practice\BrokenLinksExample.class
 prog_practice\String_Lower_Upper_Count.class
 prog_practice\MyTestInterface.class
 prog_practice\MapDemo.class
 prog_practice\SearchOP.class
+prog_practice\PracticeAuto.class
 com\utils\ExcelReader.class
 prog_practice\StaleElementDemo.class
 prog_practice\NumberSwap.class
@@ -53,6 +56,7 @@ com\applicationPages\CreateNewDealPage.class
 prog_practice\Autozone.class
 prog_practice\UITest.class
 prog_practice\ProgPractice.class
+prog_practice\DynamicPagination.class
 com\applicationPages\LoginCRMPage.class
 prog_practice\ActionsClass.class
 com\utils\EncryptionUtils.class
